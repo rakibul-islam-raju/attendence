@@ -10,8 +10,9 @@ from .models import Attendance
 
 class AttendanceView(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
+        user = self.request.user
         today = date.today()
-        attendance_date = Attendance.objects.filter(created_at=today)
+        attendance_date = Attendance.objects.filter(created_at=today, student=user)
         form = AttendanceForm()
         context = {
             'form': form,
@@ -20,43 +21,17 @@ class AttendanceView(LoginRequiredMixin, View):
         return render(self.request, 'core/attendance.html', context)
 
     def post(self, *args, **kwargs):
-        form = AttendanceForm(request.POST or None)
+        form = AttendanceForm(self.request.POST or None)
         if form.is_valid():
             present = form.cleaned_data.get('present')
-            student = request.user
+            student = self.request.user
             Attendance.objects.create(
                 student=student,
                 present=present
             )
-            messages.success(request, 'Attendance Submitted')
+            messages.success(self.request, 'Attendance Submitted')
             return redirect('/')
         context = {
             'form': form,
         }
         return render(self.request, 'core/attendance.html', context)
-
-
-# def attendanceView(request):
-#     today = date.today()
-#     attendance_date = Attendance.objects.filter(created_at=today)
-#
-#     if request.method == 'POST':
-#         form = AttendanceForm(request.POST or None)
-#
-#         if form.is_valid():
-#             present = form.cleaned_data.get('present')
-#             student = request.user
-#             Attendance.objects.create(
-#                 student = student,
-#                 present = present
-#             )
-#             messages.success(request, 'Attendance Submitted')
-#             return redirect('/')
-#     else:
-#         form = AttendanceForm()
-#
-#     context = {
-#         'form': form,
-#         'attendance_date': attendance_date
-#     }
-#     return render(request, 'core/attendance.html', context)
