@@ -35,3 +35,13 @@ class AttendanceView(LoginRequiredMixin, View):
             'form': form,
         }
         return render(self.request, 'core/attendance.html', context)
+
+class View_Attendance(LoginRequiredMixin, View):
+    def get(self, *args, **kwargs):
+        user = self.request.user
+        attendance = Attendance.objects.filter(student=user)
+        context = {
+            'attendance': attendance
+        }
+        return render(self.request, 'core/attendance-list.html', context)
+

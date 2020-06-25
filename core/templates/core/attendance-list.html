@@ -9,6 +9,7 @@
         <div class="col-lg-8">
             <div class="jumbotron">
                 <div class="text-right">
+                    <a href="{% url 'attendance' %}" class="btn btn-outline-primary">Back</a>
                     <a href="{% url 'view-attendance' %}" class="btn btn-outline-primary">View</a>
                     <a href="{% url 'logout' %}" class="btn btn-outline-primary">Logout</a>
                 </div>
@@ -16,15 +17,25 @@
                 <h1 class="display-5">Attendance</h1>
                 <p class="lead text-primary">Name: {{ user.username|capfirst }}</p>
                 <hr class="my-4">
-                {% if attendance_date.count > 0 %}
-                    <p class="text-warning">You have submitted your today's attendance</p>
-                {% else %}
-                    <form method="post" action="." class="">
-                        {% csrf_token %}
-                        {{ form|crispy }}
-                        <button class="btn btn-outline-primary" type="submit">Submit</button>
-                    </form>
-                {% endif %}
+                <table class="table table-bordered bg-white">
+                    <tr>
+                        <th>
+                            Id
+                        </th>
+                        <th>
+                            Date
+                        </th>
+                    </tr>
+               
+                {% for each_attendance in attendance %}
+                <tr>
+                    <td>{{each_attendance.id}}</td>
+                    <td>{{each_attendance.created_at}}</td>
+                </tr>
+                    <p></p>
+                   
+                {% endfor %}
+            </table>
               </div>
         </div>
     </div>
