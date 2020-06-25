@@ -1,0 +1,22 @@
+{% extends './base.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block body %}
+
+<div class="container">
+  <div class="row justify-content-center">
+      <div class="col-lg-8">
+          <div class="jumbotron">
+              <h1 class="display-5">Login</h1>
+                  <form method="post" action="." class="">
+                      {% csrf_token %}
+                      {{ form|crispy }}
+                      <button class="btn btn-outline-primary" type="submit">Submit</button>
+                  </form>
+            </div>
+      </div>
+  </div>
+</div>
+
+{% endblock body %}
