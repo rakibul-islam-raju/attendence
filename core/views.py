@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
+from django.core import serializers
 from datetime import date
+import json
 from django.contrib import messages
 from django.views.generic.edit import View
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -41,7 +43,7 @@ class View_Attendance(LoginRequiredMixin, View):
         user = self.request.user
         attendance = Attendance.objects.filter(student=user)
         context = {
-            'attendance': attendance
+            'attendance': serializers.serialize('json', attendance) 
         }
         return render(self.request, 'core/attendance-list.html', context)
 

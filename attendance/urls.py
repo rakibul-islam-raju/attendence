@@ -15,6 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
+
 
 from django.contrib.auth import views as auth_views
 from core.views import *
@@ -26,4 +29,4 @@ urlpatterns = [
     path('view-attendance/', View_Attendance.as_view(), name='view-attendance'),
     path('login/', auth_views.LoginView.as_view(template_name="core/login.html"), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
