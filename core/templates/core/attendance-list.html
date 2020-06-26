@@ -17,25 +17,58 @@
                 <h1 class="display-5">Attendance</h1>
                 <p class="lead text-primary">Name: {{ user.username|capfirst }}</p>
                 <hr class="my-4">
-                <table class="table table-bordered bg-white">
-                    <tr>
-                        <th>
-                            Id
-                        </th>
-                        <th>
-                            Date
-                        </th>
-                    </tr>
-               
-                {% for each_attendance in attendance %}
-                <tr>
-                    <td>{{each_attendance.id}}</td>
-                    <td>{{each_attendance.created_at}}</td>
-                </tr>
-                    <p></p>
-                   
-                {% endfor %}
-            </table>
+
+
+                {% if request.user.is_superuser %}
+                <form method="get">
+                    <div class="row">
+                        <div class="col-lg-5">
+                            <div class="form-group">
+                                <label for="created_at__gt">Start Date</label>
+                                <input type="date" id="created_at__gt" name="created_at__gt" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-5">
+                            <div class="form-group">
+                                <label for="created_at__lt">End Date</label>
+                                <input type="date" id="created_at__lt" name="created_at__lt" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <br>
+                                <button type="submit" class="btn btn-primary mt-2">Filter</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                
+                <table class="table table-hover table-bordered bg-white">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Attendance</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for obj in filter.qs %}
+                        <tr>
+                            <td>{{ obj.id }}</td>
+                            <td>{{ obj.present }}</td>
+                            <td>{{ obj.created_at }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="cad">
+                    <div class="card-body">
+                        <h4 class="text-danger">You are not allowed to see this</h4>
+                    </div>
+                </div>
+                {% endif %}
+
               </div>
         </div>
     </div>

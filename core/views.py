@@ -6,6 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from .forms import AttendanceForm
 from .models import Attendance
+from .filter import AttendanceFilter
 
 
 class AttendanceView(LoginRequiredMixin, View):
@@ -39,9 +40,11 @@ class AttendanceView(LoginRequiredMixin, View):
 class View_Attendance(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         user = self.request.user
-        attendance = Attendance.objects.filter(student=user)
+        # attendance = Attendance.objects.filter(student=user)
+        attendance_filter = AttendanceFilter(self.request.GET, queryset=Attendance.objects.filter(student=user))
         context = {
-            'attendance': attendance
+            # 'attendance': attendance,
+            'filter': attendance_filter
         }
         return render(self.request, 'core/attendance-list.html', context)
 
